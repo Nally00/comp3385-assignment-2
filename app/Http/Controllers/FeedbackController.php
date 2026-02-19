@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Mail\Feedback;
+use Illuminate\Support\Facades\Mail;
+
+
 class FeedbackController extends Controller
 {
     public function create()
@@ -16,12 +20,32 @@ class FeedbackController extends Controller
     {
        
         $validated = $request->validate([
-            'name' => 'required',
+            'fullname' => 'required',
             'email' => 'required|email',
-            'message' => 'required',
+            'comment' => 'required',
         ]);
 
-         return 'Feedback sent!';
+        $fullname = $request->input('fullname');
+        $email = $request->input('email');
+        $comment = $request->input('comment');
+
+
+        
+
+        Mail::to('comp3385@uwi.edu', 'COMP3385 Course Admin')
+            ->send(new Feedback($fullname, $email, $comment));
+
+        return redirect('/feedback/success')->with('success', 'Feedback Sent!');
     }
+
+
+
+    public function success()
+    {
+        return view('feedback-success');
+    }
+
+
+
 
 }

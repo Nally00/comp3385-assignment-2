@@ -28,4 +28,9 @@ Route::get('/about', function () {
     return view('about');
 });
 
+
+Route::get('/feedback/success', [FeedbackController::class, 'success']);
+
+
+
 // Create additional Routes below
